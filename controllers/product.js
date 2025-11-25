@@ -4,16 +4,30 @@ import Product from "../models/product.js";
 export const createProduct = async (req, res) => {
   try {
     const { name, price, category, stock } = req.body;
-    let image=req.file? req.file.path:null;
-    console.log(image,"-----",category)
+    let image = req.file ? req.file.path : null;
+
     if (req.user.role !== "seller") {
       return res.status(403).json({ message: "Only sellers can add products." });
     }
 
-     const validCategories = ["Electronics", "Fashion", "Books", "Home Appliances", "Groceries", "Sports", "Toys"];
-     if (!validCategories.includes(category)) {
+    const validCategories = [
+      "Mobile",
+      "Furniture",
+      "Electronics",
+      "Home Appliances",
+      "Vehicles",
+      "Home Decor",
+      "Tools & Equipment",
+      "Kitchen & Dining",
+      "Sports & Outdoor",
+      "Books & Stationery",
+      "Clothing & Accessories",
+      "Toys & Baby"
+    ];
+
+    if (!validCategories.includes(category)) {
       return res.status(400).json({ message: "Invalid category selected." });
-     }
+    }
 
     const product = new Product({
       name,
@@ -30,6 +44,7 @@ export const createProduct = async (req, res) => {
     res.status(500).json({ message: "Error creating product", error: error.message });
   }
 };
+
 
 
 export const getAllProducts = async (req, res) => {
@@ -79,7 +94,21 @@ export const updateProduct = async (req, res) => {
     }
 
     const { name, price, category, stock, image } = req.body;
-    const validCategories = ["Electronics", "Fashion", "Books", "Home Appliances", "Groceries", "Sports", "Toys"];
+
+    const validCategories = [
+      "Mobile",
+      "Furniture",
+      "Electronics",
+      "Home Appliances",
+      "Vehicles",
+      "Home Decor",
+      "Tools & Equipment",
+      "Kitchen & Dining",
+      "Sports & Outdoor",
+      "Books & Stationery",
+      "Clothing & Accessories",
+      "Toys & Baby"
+    ];
 
     if (category && !validCategories.includes(category)) {
       return res.status(400).json({ message: "Invalid category selected." });
@@ -97,6 +126,7 @@ export const updateProduct = async (req, res) => {
     res.status(500).json({ message: "Error updating product", error: error.message });
   }
 };
+
 
 
 export const deleteProduct = async (req, res) => {
